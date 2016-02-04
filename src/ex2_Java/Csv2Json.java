@@ -14,12 +14,13 @@ private static File CSVFile;
 private static BufferedReader read;
 private static BufferedWriter write;
 
-public Csv2Json(){
+public Csv2Json()// add the .csv file in this class      
+{
     FileNameExtensionFilter filter = new FileNameExtensionFilter("comma separated values", "csv");
     JFileChooser choice = new JFileChooser();
-    choice.setFileFilter(filter); //limit the files displayed
+    choice.setFileFilter(filter); //limited file to be selected
 
-    int option = choice.showOpenDialog(this);
+    int option = choice.showOpenDialog(this);//.csv file chooser panel
     if (option == JFileChooser.APPROVE_OPTION) {
         CSVFile = choice.getSelectedFile();
     }
@@ -29,14 +30,16 @@ public Csv2Json(){
     }
 }
 
-public static void main(String args[]){
+public static void main(String args[])
+{
     Csv2Json parse = new Csv2Json();
     parse.convert();
 
     System.exit(0);
 }
 
-private void convert(){
+private void convert()
+{
     /*Converts a .csv file to .json. Assumes first line is header with columns*/
     try {
         read = new BufferedReader(new FileReader(CSVFile));
@@ -65,14 +68,17 @@ private void convert(){
         while(true) {
             tokens = line.split(",");
 
-            if (tokens.length == num_cols){ //if number columns equal to number entries
+            if (tokens.length == num_cols)//if number columns equal to number entries
+            { 
                 write.write("{");
 
                 for (int k = 0; k < num_cols; ++k){ //for each column 
-                    if (tokens[k].matches("^-?[0-9]*\\.?[0-9]*$")){ //if a number
+                    if (tokens[k].matches("^-?[0-9]*\\.?[0-9]*$"))//if number in the tokens
+                    { 
                         write.write("\"" + columns[k] + "\": " + tokens[k]);
+                        // if string values in the token
                         if (k < num_cols - 1) write.write(", ");                                                }
-                    else { //if a string
+                    else { 
                         write.write("\"" + columns[k] + "\": \"" + tokens[k] + "\"");
                         if (k < num_cols - 1) write.write(", ");
                     }
@@ -100,16 +106,16 @@ private void convert(){
                 System.exit(-1); //error message
             }
         }
-
+        // progress completed to show this pop-up message in this panel
         JOptionPane.showMessageDialog(this, "File converted successfully to "     + outputName, 
                 "System Dialog", JOptionPane.PLAIN_MESSAGE);
 
         write.close();
         read.close();
-    }
-    catch (IOException e) {
+    	}
+    	catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
     }       
-}
+	}
 }
